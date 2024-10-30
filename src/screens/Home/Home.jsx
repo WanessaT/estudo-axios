@@ -24,7 +24,7 @@ export const Home = () => {
                     "Cache-Control": "no-cache"
                 }
             });
-            setPosts([...response.data]);
+            setPosts(response.data);
             setTotalPosts(Number(response.headers["x-total-count"])); // Total de posts da API
 
         } catch (error) {

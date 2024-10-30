@@ -13,11 +13,17 @@ export const NewPost = () => {
         event.preventDefault();
         // Informações de acordo com o que a API indica
         const post = { title, body, userId: 1 };
-        await blogFetch.post("/posts", {
-            body: post,
-        });
-        alert('Post criado com sucesso');
-        navigate('/');
+
+        try {
+            await blogFetch.post("/posts", post);
+            alert('Post criado com sucesso');
+            setTitle('');
+            setBody('');
+            navigate('/');
+        } catch (error) {
+            console.error("Erro ao criar o post:", error);
+            alert('Erro ao criar o post');
+        }
     };
 
     // Verifica se os campos estão vazios 
@@ -48,11 +54,11 @@ export const NewPost = () => {
                     >
                     </textarea>
                 </div>
-                <input 
-                type="submit" 
-                value="Criar post" 
-                className="btn" 
-                disabled={!isFormValid} //Vai desabilitar o botão caso o form não esteja preecnhido corretamente
+                <input
+                    type="submit"
+                    value="Criar post"
+                    className="btn"
+                    disabled={!isFormValid} //Vai desabilitar o botão caso o form não esteja preecnhido corretamente
                 />
             </form>
         </div>
