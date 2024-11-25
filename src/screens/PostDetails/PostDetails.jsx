@@ -33,7 +33,7 @@ export const PostDetails = () => {
     return (
         <div className="post">
             <h2>{post.title}</h2>
-            <p>{post.body}</p>
+            <p dangerouslySetInnerHTML={{ __html: post.body.replace(/\n/g, '<br/>') }}></p>
         </div>
     )
 };

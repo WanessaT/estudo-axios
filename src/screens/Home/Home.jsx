@@ -4,6 +4,13 @@ import { Link } from "react-router-dom";
 import './Home.css'
 import { blogFetch } from "../../axios/config";
 
+const previewText = (text, maxLength = 290 ) => {
+    if (text.length > maxLength) {
+        return text.substring(0, maxLength) + '...';
+    }
+    return text;
+};
+
 export const Home = () => {
     const [posts, setPosts] = useState([]);
     const [currentPage, setCurrentPage] = useState(1); //Controla a página atual
@@ -14,6 +21,7 @@ export const Home = () => {
     // Buscando os posts com paginação
     const getPosts = async (page) => {
         setLoading(true);
+        console.log(`Fetching posts for page ${page}`);
         try {
             const response = await blogFetch.get("/posts", {
                 params: {
@@ -46,7 +54,6 @@ export const Home = () => {
         };
     };
 
-
     return (
         <div className="home">
             <h1>Últimas publicações</h1>
@@ -56,7 +63,7 @@ export const Home = () => {
                 posts.map((post) => (
                     <div className="post" key={post.id}>
                         <h2>{post.title}</h2>
-                        <p>{post.body}</p>
+                        <p>{previewText(post.body, 290)}</p>
                         <Link to={`/posts/${post.id}`} className="btn">Ler mais</Link>
                     </div>
                 ))

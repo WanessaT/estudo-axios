@@ -2,7 +2,7 @@
 import axios from "axios";
 
 export const blogFetch = axios.create({
-    baseURL: "https://blog-api-y04r.onrender.com",
+    baseURL: "http://localhost:3000",
     headers: {
         "Content-Type": "application/json",
     }
