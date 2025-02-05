@@ -1,6 +1,6 @@
 
-import './NewPost.css';
-import { blogFetch } from '../../axios/config';
+import './style.css';
+import { api } from '../../service/config';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ export const NewPost = () => {
         const post = { title, body, userId: 1 };
 
         try {
-            await blogFetch.post("/posts", post);
+            await api.post("/posts", post);
             alert('Post criado com sucesso');
             setTitle('');
             setBody('');

@@ -1,9 +1,10 @@
 
 import { createBrowserRouter, Routes, Route } from "react-router-dom";
 import App from "../App";
-import { Home } from "../screens/Home/Home";
-import { NewPost } from "../screens/NewPost/NewPost";
-import { PostDetails } from "../screens/PostDetails/PostDetails";
+import { Home } from "../screens/Home";
+import { NewPost } from "../screens/NewPost";
+import { PostDetails } from "../screens/PostDetails";
+
 
 
 export const router = createBrowserRouter([
