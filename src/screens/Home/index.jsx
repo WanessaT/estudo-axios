@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import './Home.css'
-import { blogFetch } from "../../axios/config";
+import './style.css'
+import { api } from "../../service/config";
 
-const previewText = (text, maxLength = 290 ) => {
+const previewText = (text, maxLength = 290) => {
     if (text.length > maxLength) {
         return text.substring(0, maxLength) + '...';
     }
@@ -13,8 +13,6 @@ const previewText = (text, maxLength = 290 ) => {
 
 export const Home = () => {
     const [posts, setPosts] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1); //Controla a página atual
-    const postPerPage = 5; //Definindo quantos posts serão exibidos em cada página 
     const [totalPosts, setTotalPosts] = useState(0); //Total de posts
     const [loading, setLoading] = useState(false);
 
@@ -23,11 +21,7 @@ export const Home = () => {
         setLoading(true);
         console.log(`Fetching posts for page ${page}`);
         try {
-            const response = await blogFetch.get("/posts", {
-                params: {
-                    _limit: postPerPage,
-                    _page: page,
-                },
+            const response = await api.get("/posts", {
                 headers: {
                     "Cache-Control": "no-cache"
                 }
@@ -42,14 +36,18 @@ export const Home = () => {
         }
     };
 
+    const handleDelete = () => {
+        window.confirm("Tem certeza que deseja excluir essa publicação?")
+    }
+
     // Chama a função de buscar posts sempre que a página atual mudar 
     useEffect(() => {
-        getPosts(currentPage);
-    }, [currentPage]);
+        getPosts();
+    }, []);
 
     // Função para avançar ou voltar páginas 
     const handlePageChange = (newPage) => {
-        if (newPage >= 1 && newPage <= Math.ceil(totalPosts / postPerPage)) {
+        if (newPage >= 1 && newPage <= Math.ceil(totalPosts)) {
             setCurrentPage(newPage);
         };
     };
@@ -62,13 +60,21 @@ export const Home = () => {
             ) : (
                 posts.map((post) => (
                     <div className="post" key={post.id}>
-                        <h2>{post.title}</h2>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between"
+                            }}
+                        >
+                            <h2>{post.title}</h2>
+                            <img onClick={handleDelete} src="../../../public/delete.svg" alt="" />
+                        </div>
                         <p>{previewText(post.body, 290)}</p>
                         <Link to={`/posts/${post.id}`} className="btn">Ler mais</Link>
                     </div>
                 ))
             )}
-            <div className="pagination">
+            {/* <div className="pagination">
                 <button
                     className="btn"
                     onClick={() => handlePageChange(currentPage - 1)}
@@ -84,7 +90,7 @@ export const Home = () => {
                 >
                     Próxima
                 </button>
-            </div>
+            </div> */}
         </div>
     )
 };

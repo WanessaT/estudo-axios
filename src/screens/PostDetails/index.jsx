@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom"; // hook para acessar o parâmetro da URL
-import { blogFetch } from "../../axios/config";
+import { NavLink, useParams } from "react-router-dom"; // hook para acessar o parâmetro da URL
+import { api } from "../../service/config";
 
 export const PostDetails = () => {
     const { id } = useParams(); //Vai capturar o ID da URL
@@ -11,7 +11,7 @@ export const PostDetails = () => {
 
     const getPostById = async () => {
         try {
-            const response = await blogFetch.get(`/posts/${id}`);
+            const response = await api.get(`/posts/${id}`);
             setPost(response.data);
 
         } catch (error) {
@@ -23,6 +23,10 @@ export const PostDetails = () => {
         }
     };
 
+    const handleDelete = () => {
+        window.confirm("Tem certeza que deseja excluir essa publicação?")
+    };
+
     useEffect(() => {
         getPostById();
     }, [id]) //Executa sempre que o id mudar
@@ -32,7 +36,21 @@ export const PostDetails = () => {
 
     return (
         <div className="post">
-            <h2>{post.title}</h2>
+            <NavLink to="/"
+                style={{ marginBottom: "1rem" }}
+            >
+                <img src="../../../public/arrow.svg" alt="" />
+                Voltar
+            </NavLink>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between"
+                }}
+            >
+                <h2>{post.title}</h2>
+                <img onClick={handleDelete} src="../../../public/delete.svg" alt="" />
+            </div>
             <p dangerouslySetInnerHTML={{ __html: post.body.replace(/\n/g, '<br/>') }}></p>
         </div>
     )
